@@ -9,22 +9,31 @@ var acceleration = Vector2()
 var target = null
 
 func start(_position, _direction, _target=null):
+	#if target:
 	position = _position
 	rotation = _direction.angle()
 	velocity = _direction * speed
-	target = _target
+	# weakref because of https://godotengine.org/qa/3645/previously-freed-instance-error
+	if(target):
+		target = weakref(_target)
+	
 
 func seek():
-	var desired = (target.position - position).normalized() * speed
-	var steer = (desired - velocity).normalized() * steer_force
-	return steer
+	if target:
+		var ref = target.get_ref()
+		if ref:
+			var desired = (ref.position - position).normalized() * speed
+			var steer = (desired - velocity).normalized() * steer_force
+			return steer
 
 func _process(delta):
 	if target:
-		acceleration += seek()
-		velocity += acceleration * delta
-		velocity = velocity.clamped(speed)
-		rotation = velocity.angle()
+		var ref = target.get_ref()
+		if ref:
+			acceleration += seek()
+			velocity += acceleration * delta
+			velocity = velocity.clamped(speed)
+			rotation = velocity.angle()
 	position += velocity * delta
 
 func explode():

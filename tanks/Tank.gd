@@ -13,7 +13,7 @@ export (int) var max_health
 export (float) var offroad_friction
 
 export (int) var gun_shots = 1
-export (float, 0, 1.5) var gun_spread = 0.2
+export (float, 0, 1.5) var gun_spread = 0.0
 export (int) var max_ammo = 20
 export (int) var ammo = -1 setget set_ammo
 
@@ -56,6 +56,9 @@ func _physics_process(delta):
 		if tile in GLOBALS.slow_terrain:
 			velocity *= offroad_friction
 	move_and_slide(velocity)
+
+func can_damage():
+	return true
 
 func take_damage(amount):
 	health -= amount

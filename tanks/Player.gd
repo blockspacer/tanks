@@ -1,5 +1,8 @@
 extends "res://tanks/Tank.gd"
 
+func can_damage():
+	return true
+
 func control(delta):
 	$Turret.look_at(get_global_mouse_position())
 	var rot_dir = 0

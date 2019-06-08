@@ -25,7 +25,8 @@ func control(delta):
 		pass
 
 func _process(delta):
-	if target:
+	# see mask for collision types
+	if target and target.can_damage():
 		var target_dir = (target.global_position - global_position).normalized()
 		var current_dir = Vector2(1, 0).rotated($Turret.global_rotation)
 		$Turret.global_rotation = current_dir.linear_interpolate(target_dir, turret_speed * delta).angle()
